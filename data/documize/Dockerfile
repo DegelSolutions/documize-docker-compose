@@ -1,4 +1,4 @@
-FROM alpine as build-env
+FROM alpine as build
 
 ENV DOCUMIZEVERSION=v5.2.1
 
@@ -7,6 +7,7 @@ RUN apk update \
     && curl -L https://github.com/documize/community/releases/download/${DOCUMIZEVERSION}/documize-community-linux-amd64 --output /usr/local/bin/documize \
     && chmod +x /usr/local/bin/documize
 
-FROM scratch
-COPY --from=build-env /usr/local/bin/documize /
+FROM gcr.io/distroless/static AS final
+USER nonroot:nonroot
+COPY --from=build /usr/local/bin/documize /
 ENTRYPOINT ["/documize"]
