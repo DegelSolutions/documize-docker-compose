@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  nginx:
+    image: nginx:1.23-alpine
+    restart: unless-stopped
+    ports:
+      - "$APP_HTTP_PORT:80"
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+    networks:
+      - documizenet
+
+  db:
+    image: postgres:14
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DB: $POSTGRES_DB
+    volumes:
+       - db-data:/var/lib/postgresql/data
+    networks:
+       - documizenet
+
+  app:
+    build:
+      context: ./data/documize
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      DOCUMIZEPORT: 5001
+      DOCUMIZEDB: host=db port=5432 dbname=$POSTGRES_DB user=$POSTGRES_USER password=$POSTGRES_PASSWORD sslmode=disable
+      DOCUMIZEDBTYPE: postgresql
+      DOCUMIZESALT: $DOCUMIZESALT
+      DOCUMIZELOCATION: selfhost
+    networks:
+      - documizenet
+
+volumes:
+  db-data:
+
+networks:
+  documizenet:
