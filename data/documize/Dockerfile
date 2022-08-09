@@ -7,6 +7,6 @@ RUN apt-get update -y \
     && wget -O /usr/local/bin/documize https://github.com/documize/community/releases/download/${DOCUMIZEVERSION}/documize-community-linux-amd64 \
     && chmod +x /usr/local/bin/documize
 
-FROM gcr.io/distroless/base-debian10
+FROM scratch
 COPY --from=build-env /usr/local/bin/documize /
 ENTRYPOINT ["/documize"]
