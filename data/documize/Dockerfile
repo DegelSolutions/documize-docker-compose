@@ -1,6 +1,6 @@
 FROM alpine as build
 
-ENV DOCUMIZEVERSION=v5.2.1
+ENV DOCUMIZEVERSION=v5.4.1
 
 RUN apk update \
     && apk add curl \
