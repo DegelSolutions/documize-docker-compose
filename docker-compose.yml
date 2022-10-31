@@ -26,6 +26,8 @@ services:
   app:
     build:
       context: ./data/documize
+      args:
+        DOCUMIZE_BINARY_URL: $DOCUMIZE_BINARY_URL
     restart: unless-stopped
     depends_on:
       - db

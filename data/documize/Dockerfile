@@ -1,10 +1,10 @@
 FROM alpine as build
 
-ENV DOCUMIZEVERSION=v5.4.1
+ARG DOCUMIZE_BINARY_URL
 
 RUN apk update \
     && apk add curl \
-    && curl -L https://github.com/documize/community/releases/download/${DOCUMIZEVERSION}/documize-community-linux-amd64 --output /usr/local/bin/documize \
+    && curl -L ${DOCUMIZE_BINARY_URL} --output /usr/local/bin/documize \
     && chmod +x /usr/local/bin/documize
 
 FROM gcr.io/distroless/static AS final
